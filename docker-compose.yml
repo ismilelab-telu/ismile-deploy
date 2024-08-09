@@ -18,3 +18,42 @@ services:
       - ismile-deploy-net
     ports:
       - "5577:5432"
+
+  api:
+    container_name: ismilelab-api-prod
+    depends_on:
+      - db
+    image: ismilelab/ismile-website:api
+    env_file:
+      - .env.api
+    restart: unless-stopped
+    networks:
+      - ismile-deploy-net
+
+  web:
+    container_name: ismilelab-web-prod
+    depends_on:
+      - api
+    image: ismilelab/ismile-website:web
+    env_file:
+      - .env.web
+    restart: unless-stopped
+    ports:
+      - "4568:8080"
+    networks:
+      - ismile-deploy-net
+
+  tunnel:
+    container_name: cl-tun-ismile-web
+    depends_on:
+      - web
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    # command: tunnel run --token 
+    command: tunnel run
+    env_file:
+      - .env.tunnel
+    networks:
+      - ismile-deploy-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
