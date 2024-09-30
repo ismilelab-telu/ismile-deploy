@@ -18,6 +18,8 @@ services:
       - ismile-deploy-net
     ports:
       - "5577:5432"
+    environment:
+          - TZ=Asia/Jakarta
 
   api:
     container_name: ismilelab-api-prod
@@ -29,6 +31,8 @@ services:
     restart: unless-stopped
     networks:
       - ismile-deploy-net
+    environment:
+          - TZ=Asia/Jakarta
 
   web:
     container_name: ismilelab-web-prod
