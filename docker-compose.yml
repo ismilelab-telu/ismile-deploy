@@ -19,7 +19,7 @@ services:
     ports:
       - "5577:5432"
     environment:
-          - TZ=Asia/Jakarta
+      - TZ=Asia/Jakarta
 
   api:
     container_name: ismilelab-api-prod
@@ -28,11 +28,13 @@ services:
     image: ismilelab/ismile-website:api
     env_file:
       - .env.api
+    volumes:
+      - ./wwwroot/upload:/app/wwwroot/upload
     restart: unless-stopped
     networks:
       - ismile-deploy-net
     environment:
-          - TZ=Asia/Jakarta
+      - TZ=Asia/Jakarta
 
   web:
     container_name: ismilelab-web-prod
